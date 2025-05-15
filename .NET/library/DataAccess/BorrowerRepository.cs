@@ -25,7 +25,6 @@ namespace OneBeyondApi.DataAccess
                 var list = context.Borrowers
                     .Join(context.Catalogue
                         .Include(c => c.Book)
-                        .Include(c => c.OnLoanTo)
                         .Where(x => x.OnLoanTo != null),
                         b => b.Id,
                         c => c.OnLoanTo!.Id,

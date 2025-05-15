@@ -25,13 +25,6 @@ namespace OneBeyondApi.Controllers
             return _borrowerRepository.GetBorrowers();
         }
 
-        [HttpGet]
-        [Route("GetActiveBorrowers")]
-        public IList<ActiveBorrower> Get2()
-        {
-            return _borrowerRepository.GetActiveBorrowers();
-        }
-
         [HttpPost]
         [Route("AddBorrower")]
         public Guid Post(Borrower borrower)

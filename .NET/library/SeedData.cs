@@ -76,6 +76,13 @@ namespace OneBeyondApi
                 LoanEndDate = DateTime.Now.Date.AddDays(7)
             };
 
+            var lianasOtherBook = new BookStock
+            {
+                Book = clayBook,
+                OnLoanTo = lianaJames,
+                LoanEndDate = DateTime.Now.Date.AddDays(5)
+            };
+
             var rustBookStock = new BookStock
             {
                 Book = rustBook,
@@ -100,6 +107,7 @@ namespace OneBeyondApi
                 context.Catalogue.Add(bookOnLoanUntilToday);
                 context.Catalogue.Add(bookNotOnLoan);
                 context.Catalogue.Add(bookOnLoanUntilNextWeek);
+                context.Catalogue.Add(lianasOtherBook);
                 context.Catalogue.Add(rustBookStock);
 
                 context.SaveChanges();

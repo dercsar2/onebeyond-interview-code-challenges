@@ -1,4 +1,5 @@
-﻿using OneBeyondApi.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using OneBeyondApi.Model;
 
 namespace OneBeyondApi.DataAccess
 {
@@ -12,6 +13,25 @@ namespace OneBeyondApi.DataAccess
             using (var context = new LibraryContext())
             {
                 var list = context.Borrowers
+                    .ToList();
+                return list;
+            }
+        }
+
+        public List<ActiveBorrower> GetActiveBorrowers()
+        {
+            using (var context = new LibraryContext())
+            {
+                var list = context.Borrowers
+                    .Join(context.Catalogue
+                        .Include(c => c.Book)
+                        .Include(c => c.OnLoanTo)
+                        .Where(x => x.OnLoanTo != null),
+                        b => b.Id,
+                        c => c.OnLoanTo!.Id,
+                        (borrower, bookStock) => new { borrower, bookStock })
+                    .GroupBy(item => item.borrower)
+                    .Select(g => new ActiveBorrower(g.Key, g.Select(gi => gi.bookStock.Book.Name)))
                     .ToList();
                 return list;
             }

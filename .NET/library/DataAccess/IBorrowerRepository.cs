@@ -6,6 +6,8 @@ namespace OneBeyondApi.DataAccess
     {
         public List<Borrower> GetBorrowers();
 
+        public List<ActiveBorrower> GetActiveBorrowers();
+
         public Guid AddBorrower(Borrower borrower);
     }
 }

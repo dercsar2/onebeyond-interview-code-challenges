@@ -77,12 +77,17 @@ namespace OneBeyondApi.DataAccess
         public AvailabilityResult QueryAvailability(Book title)
         {
             using var c = new LibraryContext();
+            return QueryAvailability(title, c);
+        }
+
+        private AvailabilityResult QueryAvailability(Book title, LibraryContext c)
+        {
             var availableBooks = c.Catalogue.Where(x => x.Book.Id == title.Id && x.OnLoanTo == null).ToList();
             if (availableBooks.Any())
             {
                 return new AvailabilityResult() { ReadyItems = availableBooks, ReservableItems = [] };
             }
-                
+
             var data = c.Catalogue
                 .Include(bs => bs.Book)
                 .Where(x => x.Book.Id == title.Id && x.OnLoanTo != null)
@@ -93,5 +98,19 @@ namespace OneBeyondApi.DataAccess
             return new AvailabilityResult() { ReadyItems = [], ReservableItems = data };
         }
 
+        public void CreateReservation(BookStock bookStock, Borrower borrower, DateTime startDate, int daysLong)
+        {
+            using var c = new LibraryContext();
+            var availability = QueryAvailability(bookStock.Book, c);
+            if (availability.ReadyItems.Any())
+                throw new InvalidOperationException("Reserve an available book is not allowed. Implement loan functionality.");
+            var reservabkleBook = availability.ReservableItems.Single(x => x.BookStock.Id == bookStock.Id);
+            if (startDate < reservabkleBook.ReservableFrom)
+                throw new InvalidOperationException("Cannot reserve for a date when the book is reserved.");
+
+            var res = new Reservation() { BookStock = bookStock, ReservingBorrower = borrower, LoanStartDate = startDate, LoanEndDate = startDate.AddDays(daysLong) };
+            c.Reservations.Add(res);
+            c.SaveChanges();
+        }
     }
 }

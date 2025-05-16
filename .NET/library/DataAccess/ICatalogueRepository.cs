@@ -13,5 +13,7 @@ namespace OneBeyondApi.DataAccess
         public List<BookStock> SearchCatalogue(CatalogueSearch search);
 
         public AvailabilityResult QueryAvailability(Book title);
+
+        public void CreateReservation(BookStock bookStock, Borrower borrower, DateTime startDate, int daysLong);
     }
 }

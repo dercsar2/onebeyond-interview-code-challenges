@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OneBeyondApi.DataAccess;
 using OneBeyondApi.Model;
+using OneBeyondApi.Service;
 using System.Collections;
 
 namespace OneBeyondApi.Controllers
@@ -11,16 +12,16 @@ namespace OneBeyondApi.Controllers
     {
         private readonly ILogger<BorrowerController> _logger;
         private readonly IBorrowerRepository _borrowerRepository;
-        private readonly ICatalogueRepository _catalogueRepository;
+        private readonly IReturnBookService _returnBookService;
 
         public OnLoanController(
             ILogger<BorrowerController> logger,
             IBorrowerRepository borrowerRepository,
-            ICatalogueRepository catalogueRepository)
+            IReturnBookService returnBookService)
         {
             _logger = logger;
             _borrowerRepository = borrowerRepository;
-            _catalogueRepository = catalogueRepository;
+            _returnBookService = returnBookService;
         }
 
         [HttpGet]
@@ -32,12 +33,7 @@ namespace OneBeyondApi.Controllers
         [HttpPost]
         public void ReturnBookStock(Guid bookStockId)
         {
-            var bookStock = _catalogueRepository.GetBookStockById(bookStockId);
-            if (bookStock == null)
-                throw new InvalidOperationException();
-            if (bookStock.OnLoanTo == null)
-                throw new InvalidOperationException();
-            _catalogueRepository.ReturnBookByBookStockId(bookStockId);
+            _returnBookService.ReturnBook(bookStockId);
         }
     }
 }

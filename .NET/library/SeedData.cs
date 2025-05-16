@@ -56,6 +56,12 @@ namespace OneBeyondApi
                 EmailAddress = "liana@gmail.com"
             };
 
+            var peterDercsar = new Borrower
+            {
+                Name = "Dercsár Péter",
+                EmailAddress = "dercsar@gmail.com"
+            };
+
             var bookOnLoanUntilToday = new BookStock {
                 Book = clayBook,
                 OnLoanTo = daveSmith,
@@ -103,12 +109,29 @@ namespace OneBeyondApi
 
                 context.Borrowers.Add(daveSmith);
                 context.Borrowers.Add(lianaJames);
+                context.Borrowers.Add(peterDercsar);
 
                 context.Catalogue.Add(bookOnLoanUntilToday);
                 context.Catalogue.Add(bookNotOnLoan);
                 context.Catalogue.Add(bookOnLoanUntilNextWeek);
                 context.Catalogue.Add(lianasOtherBook);
                 context.Catalogue.Add(rustBookStock);
+
+                var firstReservation = new Reservation()
+                {
+                    BookStock = bookOnLoanUntilNextWeek,
+                    ReservingBorrower = peterDercsar,
+                    LoanStartDate = bookOnLoanUntilNextWeek.LoanEndDate.Value,
+                    LoanEndDate = bookOnLoanUntilNextWeek.LoanEndDate.Value.AddDays(7)
+                };
+                context.Reservations.Add(firstReservation);
+                context.Reservations.Add(new Reservation()
+                {
+                    BookStock = bookOnLoanUntilNextWeek,
+                    ReservingBorrower = lianaJames,
+                    LoanStartDate = firstReservation.LoanEndDate,
+                    LoanEndDate = firstReservation.LoanEndDate.AddDays(7)
+                });
 
                 context.SaveChanges();
 

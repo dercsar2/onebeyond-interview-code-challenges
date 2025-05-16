@@ -3,7 +3,7 @@ using OneBeyondApi.Model;
 
 namespace OneBeyondApi.DataAccess
 {
-    public class LibraryContext: DbContext
+    public class LibraryContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -13,5 +13,7 @@ namespace OneBeyondApi.DataAccess
         public DbSet<Book> Books { get; set; }
         public DbSet<BookStock> Catalogue { get; set; }
         public DbSet<Borrower> Borrowers { get; set; }
+        
+        public DbSet<Fine> Fines { get; set; }
     }
 }

@@ -10,6 +10,8 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IBorrowerRepository, BorrowerRepository>();
 builder.Services.AddScoped<ICatalogueRepository, CatalogueRepository>();
 builder.Services.AddScoped<IReturnBookService, ReturnBookService>();
+builder.Services.AddScoped<IFineRepository, FineRepository>();
+builder.Services.AddScoped<IFineService, FineService>();
 
 // Seed test data into memory DB
 SeedData.SetInitialData();

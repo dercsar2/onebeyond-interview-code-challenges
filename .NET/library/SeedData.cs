@@ -80,7 +80,7 @@ namespace OneBeyondApi
             {
                 Book = clayBook,
                 OnLoanTo = lianaJames,
-                LoanEndDate = DateTime.Now.Date.AddDays(5)
+                LoanEndDate = DateTime.Now.Date.AddDays(-5)
             };
 
             var rustBookStock = new BookStock
